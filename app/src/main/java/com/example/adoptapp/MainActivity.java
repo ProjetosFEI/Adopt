@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private cards cards_data[];
     private arrayAdapter arrayAdapter;
     private int i;
+    private ImageView mConfigs, mSignout;
 
     private FirebaseAuth mAuth;
 
@@ -51,6 +53,21 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentUId = mAuth.getCurrentUser().getUid();
+        mConfigs = (ImageView) findViewById(R.id.configs);
+        mSignout = (ImageView) findViewById(R.id.signout);
+        mConfigs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToSettings(view);
+            }
+        });
+
+        mSignout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logoutUser(view);
+            }
+        });
 
         checkUserSex();
 
@@ -77,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 cards obj = (cards) dataObject;
                 String userId = obj.getUserId();
                 usersDb.child(oppositeUserSex).child(userId).child("connections").child("nope").child(currentUId).setValue(true);
-                Toast.makeText(MainActivity.this, "Left", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Não Gostou!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -86,11 +103,12 @@ public class MainActivity extends AppCompatActivity {
                 String userId = obj.getUserId();
                 usersDb.child(oppositeUserSex).child(userId).child("connections").child("yeps").child(currentUId).setValue(true);
                 isConnectionMatch(userId);
-                Toast.makeText(MainActivity.this, "Right", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Gostou!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
+                //Toast.makeText(MainActivity.this, "Não há mais usuários!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -103,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                Toast.makeText(MainActivity.this, "Item Clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Item Clicado", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -132,13 +150,13 @@ public class MainActivity extends AppCompatActivity {
     public void checkUserSex(){
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        DatabaseReference maleDb = FirebaseDatabase.getInstance().getReference().child("Users").child("Male");
-        maleDb.addChildEventListener(new ChildEventListener() {
+        DatabaseReference peopleDb = FirebaseDatabase.getInstance().getReference().child("Users").child("People");
+        peopleDb.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.getKey().equals(user.getUid())){
-                    userSex = "Male";
-                    oppositeUserSex = "Female";
+                    userSex = "People";
+                    oppositeUserSex = "Pets";
                     getOppositeSexUsers();
                 }
             }
@@ -157,13 +175,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        DatabaseReference femaleDb = FirebaseDatabase.getInstance().getReference().child("Users").child("Female");
-        femaleDb.addChildEventListener(new ChildEventListener() {
+        DatabaseReference petsDb = FirebaseDatabase.getInstance().getReference().child("Users").child("Pets");
+        petsDb.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.getKey().equals(user.getUid())){
-                    userSex = "Female";
-                    oppositeUserSex = "Male";
+                    userSex = "Pets";
+                    oppositeUserSex = "People";
                     getOppositeSexUsers();
                 }
             }
