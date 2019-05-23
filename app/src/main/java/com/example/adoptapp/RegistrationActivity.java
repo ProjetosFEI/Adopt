@@ -42,6 +42,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private ImageView mProfileImage;
     private String profileImageUrl;
     private Uri resultUri;
+    private int flag = 0;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
@@ -80,6 +81,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(intent, 1);
+                flag = 1;
             }
         });
 
@@ -108,10 +110,15 @@ public class RegistrationActivity extends AppCompatActivity {
                             String userId = mAuth.getCurrentUser().getUid();
                             DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child("People").child(userId);
                             Map userInfo = new HashMap<>();
-                            uploadPhoto();
+
+                            if(flag == 1){
+                                uploadPhoto();
+                            }else{
+                                userInfo.put("profileImageUrl", "default");
+                            }
                             userInfo.put("name", name);
                             userInfo.put("sexo", sexo);
-                            userInfo.put("profileImageUrl", profileImageUrl);
+
                             currentUserDb.updateChildren(userInfo);
                             Toast.makeText(RegistrationActivity.this, "E-mail cadastrado!", Toast.LENGTH_SHORT).show();
                             finish();
@@ -153,6 +160,7 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 finish();
+                return;
             }
         });
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -165,7 +173,6 @@ public class RegistrationActivity extends AppCompatActivity {
                         Map userInfo = new HashMap();
                         userInfo.put("profileImageUrl", downloadUrl.toString());
                         mCustomerDatabase.updateChildren(userInfo);
-
                         finish();
                         return;
                     }

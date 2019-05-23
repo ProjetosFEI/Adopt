@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -26,8 +27,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -45,6 +49,7 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
     private ImageView mProfileImage;
     private String profileImageUrl;
     private Uri resultUri;
+    private int flag = 0;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
@@ -77,15 +82,17 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
         mRadioGroup2 = (RadioGroup) findViewById(R.id.radioGroup2);
         mProfileImage = (ImageView) findViewById(R.id.profileImage);
 
+
         mProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //uploadPhoto();
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(intent, 1);
+                flag = 1;
             }
         });
+
 
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,12 +123,16 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
                             DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child("Pets").child(userId);
                             Map userInfo = new HashMap<>();
 
+                            if(flag == 1){
+                                uploadPhoto();
+                            }else{
+                                userInfo.put("profileImageUrl", "default");
+                            }
 
-                            uploadPhoto();
                             userInfo.put("name", name);
                             userInfo.put("sexo", sexo);
                             userInfo.put("porte", porte);
-                            userInfo.put("profileImageUrl", profileImageUrl);
+                            //userInfo.put("profileImageUrl", profileImageUrl);
                             currentUserDb.updateChildren(userInfo);
                             Toast.makeText(RegistrationAnimalActivity.this, "E-mail cadastrado!", Toast.LENGTH_SHORT).show();
                             finish();
@@ -144,46 +155,48 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
         mAuth.removeAuthStateListener(firebaseAuthStateListener);
     }
 
+
     public void uploadPhoto(){
         final StorageReference filepath = FirebaseStorage.getInstance().getReference().child("profileImages").child(mAuth.getCurrentUser().getUid());
         final DatabaseReference mCustomerDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Pets").child(mAuth.getCurrentUser().getUid());
         Bitmap bitmap = null;
-
         try {
-            bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), resultUri);
+            bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), resultUri);  //aqui===================
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
-        byte[] data = baos.toByteArray();
-        UploadTask uploadTask = filepath.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                finish();
-            }
-        });
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri downloadUrl) {
-                        Map userInfo = new HashMap();
-                        userInfo.put("profileImageUrl", downloadUrl.toString());
-                        mCustomerDatabase.updateChildren(userInfo);
 
-                        finish();
-                        return;
-                    }
-                });
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+            byte[] data = baos.toByteArray();
+            UploadTask uploadTask = filepath.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    finish();
+                    return;
+                }
+            });
 
-            }
-        });
-    }
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    //Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri downloadUrl) {
+                            Map userInfo = new HashMap();
+                            userInfo.put("profileImageUrl", downloadUrl.toString());
+                            mCustomerDatabase.updateChildren(userInfo);
+                            finish();
+                            return;
+                        }
+                    });
+
+                }
+            });
+        }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
