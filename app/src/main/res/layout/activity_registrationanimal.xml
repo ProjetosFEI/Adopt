@@ -63,7 +63,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="40dp"
-        android:layout_marginBottom="436dp"
+        android:layout_marginBottom="456dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/password" />
@@ -134,35 +134,35 @@
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="237dp"
-        android:layout_height="39dp"
+        android:layout_width="232dp"
+        android:layout_height="42dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="20dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.468"
+        app:layout_constraintHorizontal_bias="0.453"
         app:layout_constraintStart_toStartOf="parent">
 
         <RadioButton
             android:id="@+id/smallButton"
-            android:layout_width="wrap_content"
+            android:layout_width="113dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:buttonTint="#FCFCF7F7"
-            android:text="Masculino"
+            android:text="Macho"
             android:textColor="#FCFCF7F7"
             android:textColorHint="#FD000000"
             android:textColorLink="#FAF5F1F1" />
 
         <RadioButton
             android:id="@+id/mediumButton"
-            android:layout_width="102dp"
+            android:layout_width="117dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:buttonTint="#FCFCF7F7"
-            android:text="Feminino"
+            android:text="Fêmea"
             android:textColor="#FAF7F7" />
     </RadioGroup>
 
@@ -214,7 +214,7 @@
         android:layout_width="40dp"
         android:layout_height="23dp"
         android:layout_marginStart="28dp"
-        android:layout_marginBottom="188dp"
+        android:layout_marginBottom="200dp"
         android:text="Porte: "
         android:textColor="#FAF7F7"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -226,7 +226,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="28dp"
         android:backgroundTint="#C0CCDA"
         android:ems="10"
         android:hint="Raça"
@@ -239,20 +239,27 @@
         app:layout_constraintHorizontal_bias="0.678"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profileImage"
-        android:layout_width="121dp"
-        android:layout_height="89dp"
+        android:layout_width="137dp"
+        android:layout_height="101dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:src="@drawable/camera"
+        app:civ_border_color="#FDFCFC"
+        app:civ_border_width="2dp"
         app:layout_constraintBottom_toTopOf="@+id/email"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.521"
         app:srcCompat="@drawable/camera"
         tools:srcCompat="@drawable/camera" />
+
 
 
 </android.support.constraint.ConstraintLayout>

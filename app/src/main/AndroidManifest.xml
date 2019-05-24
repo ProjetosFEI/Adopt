@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.adoptapp">
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -10,6 +11,7 @@
         android:roundIcon="@drawable/finallogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".MatchesActivity"></activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".ChooseLoginRegistrationActivity">
             <intent-filter>

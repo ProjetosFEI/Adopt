@@ -120,7 +120,7 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
                             Toast.makeText(RegistrationAnimalActivity.this, "Erro ao se cadastrar!", Toast.LENGTH_SHORT).show();
                         }else{
                             String userId = mAuth.getCurrentUser().getUid();
-                            DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child("Pets").child(userId);
+                            DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
                             Map userInfo = new HashMap<>();
 
                             if(flag == 1){
@@ -131,6 +131,7 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
 
                             userInfo.put("name", name);
                             userInfo.put("sexo", sexo);
+                            userInfo.put("type", "pet");
                             userInfo.put("porte", porte);
                             //userInfo.put("profileImageUrl", profileImageUrl);
                             currentUserDb.updateChildren(userInfo);
@@ -158,7 +159,7 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
 
     public void uploadPhoto(){
         final StorageReference filepath = FirebaseStorage.getInstance().getReference().child("profileImages").child(mAuth.getCurrentUser().getUid());
-        final DatabaseReference mCustomerDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Pets").child(mAuth.getCurrentUser().getUid());
+        final DatabaseReference mCustomerDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         Bitmap bitmap = null;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), resultUri);  //aqui===================

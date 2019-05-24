@@ -108,7 +108,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             Toast.makeText(RegistrationActivity.this, "Erro ao se cadastrar!", Toast.LENGTH_SHORT).show();
                         }else{
                             String userId = mAuth.getCurrentUser().getUid();
-                            DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child("People").child(userId);
+                            DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId); //child("People")
                             Map userInfo = new HashMap<>();
 
                             if(flag == 1){
@@ -117,6 +117,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 userInfo.put("profileImageUrl", "default");
                             }
                             userInfo.put("name", name);
+                            userInfo.put("type", "people");
                             userInfo.put("sexo", sexo);
 
                             currentUserDb.updateChildren(userInfo);
@@ -143,7 +144,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void uploadPhoto(){
         final StorageReference filepath = FirebaseStorage.getInstance().getReference().child("profileImages").child(mAuth.getCurrentUser().getUid());
-        final DatabaseReference mCustomerDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("People").child(mAuth.getCurrentUser().getUid());
+        final DatabaseReference mCustomerDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         Bitmap bitmap = null;
 
         try {
