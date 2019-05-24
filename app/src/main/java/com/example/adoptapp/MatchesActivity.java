@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +30,7 @@ public class MatchesActivity extends AppCompatActivity {
     private String userSex;
     private String oppositeUserSex;
     private TextView mNoMatch;
+    private ImageView mBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class MatchesActivity extends AppCompatActivity {
         //currentUserSex = FirebaseDatabase.getInstance().getReference().child("Users")
 
         mNoMatch = (TextView) findViewById(R.id.noMatch);
+        mBack = (ImageView) findViewById(R.id.goback);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(true);
@@ -48,6 +52,14 @@ public class MatchesActivity extends AppCompatActivity {
 
         //checkUserSex();
         getUserMatchId();
+
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                return;
+            }
+        });
 
 
     }
