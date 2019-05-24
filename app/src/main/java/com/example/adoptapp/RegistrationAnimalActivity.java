@@ -99,47 +99,60 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int selectId = mRadioGroup.getCheckedRadioButtonId();
                 int selectPorte = mRadioGroup2.getCheckedRadioButtonId();
-
+                final String sexo, porte;
                 final RadioButton radioButton = (RadioButton) findViewById(selectId);
                 final RadioButton radioButton2 = (RadioButton) findViewById(selectPorte);
 
-                if(radioButton.getText() == null){
-                    return;
-                }
+
+
 
                 final String email = mEmail.getText().toString();
                 final String password = mPassword.getText().toString();
                 final String name = mName.getText().toString();
-                final String sexo = radioButton.getText().toString();
-                final String porte = radioButton2.getText().toString();
 
-                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegistrationAnimalActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(!task.isSuccessful()){
-                            Toast.makeText(RegistrationAnimalActivity.this, "Erro ao se cadastrar!", Toast.LENGTH_SHORT).show();
+                if(!email.equals("") && !password.equals("")  && !name.equals("")){
+                    if(selectId != -1 && selectPorte != -1){
+                        sexo = radioButton.getText().toString();
+                        porte = radioButton2.getText().toString();
+                        if(flag == 1){
+                            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegistrationAnimalActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(!task.isSuccessful()){
+                                        Toast.makeText(RegistrationAnimalActivity.this, "Erro ao se cadastrar!", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        String userId = mAuth.getCurrentUser().getUid();
+                                        DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+                                        Map userInfo = new HashMap<>();
+
+                                        userInfo.put("profileImageUrl", profileImageUrl);
+                                        uploadPhoto();
+                                        userInfo.put("name", name);
+                                        userInfo.put("sexo", sexo);
+                                        userInfo.put("type", "pet");
+                                        userInfo.put("porte", porte);
+                                        //userInfo.put("profileImageUrl", profileImageUrl);
+                                        currentUserDb.updateChildren(userInfo);
+                                        Toast.makeText(RegistrationAnimalActivity.this, "E-mail cadastrado!", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                }
+                            });
                         }else{
-                            String userId = mAuth.getCurrentUser().getUid();
-                            DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
-                            Map userInfo = new HashMap<>();
-
-                            if(flag == 1){
-                                uploadPhoto();
-                            }else{
-                                userInfo.put("profileImageUrl", "default");
-                            }
-
-                            userInfo.put("name", name);
-                            userInfo.put("sexo", sexo);
-                            userInfo.put("type", "pet");
-                            userInfo.put("porte", porte);
-                            //userInfo.put("profileImageUrl", profileImageUrl);
-                            currentUserDb.updateChildren(userInfo);
-                            Toast.makeText(RegistrationAnimalActivity.this, "E-mail cadastrado!", Toast.LENGTH_SHORT).show();
-                            finish();
+                            Toast.makeText(RegistrationAnimalActivity.this, "Selecione uma foto!", Toast.LENGTH_SHORT).show();
                         }
+                    }else{
+                        sexo = "";
+                        porte = "";
+                        Toast.makeText(RegistrationAnimalActivity.this, "Selecione o sexo e porte!", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }else{
+                    Toast.makeText(RegistrationAnimalActivity.this, "Digite todos campos!", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
             }
         });
     }
