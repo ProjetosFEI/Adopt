@@ -11,7 +11,8 @@
         android:roundIcon="@drawable/finallogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MatchesActivity"></activity>
+        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".MatchesActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ChooseLoginRegistrationActivity">
             <intent-filter>

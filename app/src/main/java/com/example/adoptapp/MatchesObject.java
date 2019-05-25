@@ -12,14 +12,15 @@ public class MatchesObject {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public String getUserId(){
-        return userId;
-    }
+
 
     public String getPhone(){
         return phone;
     }
 
+    public String getUserId(){
+        return userId;
+    }
     public void setUserID(String userID){
         this.userId = userId;
     }

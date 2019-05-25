@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String currentUId;
 
-    private DatabaseReference usersDb;
+    private DatabaseReference usersDb, chatsDb;
 
 
     private String getCurrentUId(){
@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         usersDb = FirebaseDatabase.getInstance().getReference().child("Users");
+        chatsDb = FirebaseDatabase.getInstance().getReference().child("Chat");
+
 
         mAuth = FirebaseAuth.getInstance();
         currentUId = mAuth.getCurrentUser().getUid();
@@ -85,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         checkUserSex();
+
 
 
 
@@ -142,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void isConnectionMatch(String userId) {
         DatabaseReference currentUserConnectionsDb = usersDb.child(currentUId).child("connections").child("yeps").child(userId);
         currentUserConnectionsDb.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -149,8 +153,12 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     Toast.makeText(MainActivity.this, "Match!", Toast.LENGTH_LONG).show();
-                    usersDb.child(dataSnapshot.getKey()).child("connections").child("matches").child(currentUId).setValue(true);
-                    usersDb.child(currentUId).child("connections").child("matches").child(dataSnapshot.getKey()).setValue(true);
+
+                    String key = FirebaseDatabase.getInstance().getReference().child("Chat").push().getKey();
+                    chatsDb.setValue(key);
+
+                    usersDb.child(dataSnapshot.getKey()).child("connections").child("matches").child(currentUId).child("ChatId").setValue(key);
+                    usersDb.child(currentUId).child("connections").child("matches").child(dataSnapshot.getKey()).child("ChatId").setValue(key);
                 }
             }
 
