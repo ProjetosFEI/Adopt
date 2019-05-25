@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private RadioGroup mRadioGroup;
     private ImageView mProfileImage;
     private String profileImageUrl;
+    private ProgressBar mProgressBar;
     private Uri resultUri;
     private int flag = 0;
 
@@ -73,6 +75,7 @@ public class RegistrationActivity extends AppCompatActivity {
         mName = (EditText) findViewById(R.id.name);
         mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup2);
         mProfileImage = (ImageView) findViewById(R.id.profileImage);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         mProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +91,7 @@ public class RegistrationActivity extends AppCompatActivity {
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mProgressBar.setVisibility(View.VISIBLE);
                 int selectId = mRadioGroup.getCheckedRadioButtonId();
                 final String sexo;
                 final RadioButton radioButton = (RadioButton) findViewById(selectId);
@@ -105,6 +109,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
+                                    mProgressBar.setVisibility(View.GONE);
                                     if(!task.isSuccessful()){
                                         Toast.makeText(RegistrationActivity.this, "Erro ao se cadastrar!", Toast.LENGTH_SHORT).show();
                                     }else{
