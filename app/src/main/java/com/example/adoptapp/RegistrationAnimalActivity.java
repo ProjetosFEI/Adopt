@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
     private RadioGroup mRadioGroup, mRadioGroup2;
     private ImageView mProfileImage;
     private String profileImageUrl;
+    private ProgressBar mProgressBar;
     private Uri resultUri;
     private int flag = 0;
 
@@ -81,6 +83,7 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
         mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         mRadioGroup2 = (RadioGroup) findViewById(R.id.radioGroup2);
         mProfileImage = (ImageView) findViewById(R.id.profileImage);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 
         mProfileImage.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +100,7 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mProgressBar.setVisibility(View.VISIBLE);
                 int selectId = mRadioGroup.getCheckedRadioButtonId();
                 int selectPorte = mRadioGroup2.getCheckedRadioButtonId();
                 final String sexo, porte;
@@ -118,6 +122,7 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
                             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegistrationAnimalActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
+                                    mProgressBar.setVisibility(View.GONE);
                                     if(!task.isSuccessful()){
                                         Toast.makeText(RegistrationAnimalActivity.this, "Erro ao se cadastrar!", Toast.LENGTH_SHORT).show();
                                     }else{
@@ -125,7 +130,7 @@ public class RegistrationAnimalActivity extends AppCompatActivity {
                                         DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
                                         Map userInfo = new HashMap<>();
 
-                                        userInfo.put("profileImageUrl", profileImageUrl);
+                                        userInfo.put("profileImageUrl", "default");
                                         uploadPhoto();
                                         userInfo.put("name", name);
                                         userInfo.put("sexo", sexo);
