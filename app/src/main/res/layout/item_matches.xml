@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,8 +8,7 @@
     android:padding="10dp">
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/MatchImage"
         android:layout_width="105dp"
         android:layout_height="103dp"
@@ -21,7 +19,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="101dp"
         android:gravity="center|left"
@@ -29,26 +28,61 @@
 
         <TextView
             android:id="@+id/MatchName"
-            android:layout_width="225dp"
-            android:layout_height="29dp"
-            android:layout_marginStart="12dp"
+            android:layout_width="162dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:text="Match's Name"
             android:textColor="#FCFBFB"
-            app:layout_constraintStart_toEndOf="@+id/MatchImage" />
+            app:layout_constraintEnd_toStartOf="@+id/callMatch"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_conversion_absoluteHeight="29dp"
+            tools:layout_conversion_absoluteWidth="180dp"
+            tools:layout_conversion_wrapHeight="65"
+            tools:layout_conversion_wrapWidth="315" />
+
+        <ImageView
+            android:id="@+id/callMatch"
+            android:layout_width="47dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.317"
+            app:srcCompat="@drawable/phonecall"
+            tools:layout_conversion_absoluteHeight="40dp"
+            tools:layout_conversion_absoluteWidth="54dp"
+            tools:layout_conversion_wrapHeight="354"
+            tools:layout_conversion_wrapWidth="896" />
 
         <TextView
             android:id="@+id/MatchPhone"
-            android:layout_width="223dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="161dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
             android:text="Matches Phone"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/MatchImage"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/callMatch"
+            app:layout_constraintHorizontal_bias="0.032"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/MatchName"
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_conversion_absoluteHeight="40dp"
+            tools:layout_conversion_absoluteWidth="175dp"
+            tools:layout_conversion_wrapHeight="65"
+            tools:layout_conversion_wrapWidth="341" />
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 
 </LinearLayout>
