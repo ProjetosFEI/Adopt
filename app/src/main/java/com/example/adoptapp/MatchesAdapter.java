@@ -1,6 +1,8 @@
 package com.example.adoptapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +35,18 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesViewHolders>{
     @Override
     public void onBindViewHolder(MatchesViewHolders holder, int position){
         //holder.mMatchId.setText(matchesList.get(position).getUserId()); //===============================colocar mais infos aqui depois
+        final String tel = matchesList.get(position).getPhone();
         holder.mMatchName.setText(matchesList.get(position).getName());
         holder.mMatchPhone.setText(matchesList.get(position).getPhone());
+        holder.mCallMatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("tel:"+tel);
+                Intent intent = new Intent(Intent.ACTION_DIAL,uri);
+                context.startActivity(intent);
+                return;
+            }
+        });
         if(!matchesList.get(position).getProfileImageUrl().equals("default")){
             Glide.with(context).load(matchesList.get(position).getProfileImageUrl()).into(holder.mMatchImage);
         }
